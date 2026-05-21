@@ -1,6 +1,5 @@
 #!/bin/bash
-# Script para ejecutar SG-SST (app web con Vaadin)
-# Requisitos: Java 17+, Maven, Node.js (para compilar frontend Vaadin)
+# Script para ejecutar SG-SST en Linux (Void Linux)
 
 cd "$(dirname "$0")"
 
@@ -8,17 +7,32 @@ echo "========================================"
 echo "  SG-SST - SISTEMA DE GESTION SST"
 echo "========================================"
 
-if [ "$1" = "dev" ]; then
-    echo "Modo desarrollo: compilando e iniciando..."
-    mvn clean compile vaadin:prepare-frontend exec:java
+# 1. Buscar mvn
+MVN=""
+if command -v mvn &>/dev/null; then
+    MVN="mvn"
 else
-    echo "Compilando paquete (modo produccion)..."
-    mvn clean package -DskipTests
-    if [ $? -eq 0 ]; then
-        echo "Iniciando servidor web..."
-        java -jar target/sg-sst-1.0.0.jar
-    else
-        echo "Error de compilacion"
-        exit 1
-    fi
+    for DIR in /opt /usr/local /usr/share "$HOME" "$HOME/Downloads" "$HOME/Documents"; do
+        for F in "$DIR"/apache-maven*/bin/mvn "$DIR"/maven*/bin/mvn "$DIR"/Maven*/bin/mvn; do
+            if [ -x "$F" ]; then
+                MVN="$F"
+                echo "Maven encontrado en: $F"
+                break 2
+            fi
+        done
+    done
+fi
+
+if [ -z "$MVN" ]; then
+    echo "No se encontro Maven. Instalalo con: sudo xbps-install apache-maven"
+    exit 1
+fi
+
+# 2. Ejecutar
+if [ "$1" = "prod" ]; then
+    echo "Compilando modo produccion..."
+    "$MVN" clean package -DskipTests && java -jar target/sg-sst-1.0.0.jar
+else
+    echo "Modo desarrollo: compilando e iniciando..."
+    "$MVN" clean compile vaadin:prepare-frontend exec:java
 fi
