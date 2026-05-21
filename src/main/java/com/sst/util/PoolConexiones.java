@@ -16,21 +16,20 @@ public class PoolConexiones {
     }
 
     public static void inicializar() {
-        String url = System.getProperty("db.url");
-        String usuario = System.getProperty("db.usuario");
-        String contrasena = System.getProperty("db.contrasena");
-
-        if (url == null || url.isEmpty()) {
-            url = "jdbc:postgresql://localhost:5432/sst";
-            usuario = "postgres";
-            contrasena = "0619";
-        }
+        CargadorPropiedades.cargar("application.properties");
+        String url = System.getProperty("db.url", CargadorPropiedades.get("db.url"));
+        String usuario = System.getProperty("db.usuario", CargadorPropiedades.get("db.usuario"));
+        String contrasena = System.getProperty("db.contrasena", CargadorPropiedades.get("db.contrasena"));
 
         HikariConfig configuracion = new HikariConfig();
         configuracion.setJdbcUrl(url);
         configuracion.setUsername(usuario);
         configuracion.setPassword(contrasena);
         configuracion.setDriverClassName("org.postgresql.Driver");
+
+        // SSL requerido por Supabase
+        configuracion.addDataSourceProperty("ssl", "true");
+        configuracion.addDataSourceProperty("sslmode", "require");
         
         configuracion.setMaximumPoolSize(10);
         configuracion.setMinimumIdle(2);
