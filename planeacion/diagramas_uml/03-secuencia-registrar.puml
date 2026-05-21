@@ -1,0 +1,43 @@
+@startuml SecuenciaRegistrarEvento
+!theme plain
+
+title Diagrama de Secuencia - Registrar Evento
+
+actor Usuario
+participant ":EventoController" as ctrl
+participant ":EventoService" as svc
+participant ":EventoRepository" as repo
+
+Usuario -> ctrl : GET /evento/nuevo
+activate ctrl
+ctrl --> Usuario : mostrarFormulario.html
+deactivate ctrl
+
+Usuario -> ctrl : POST /evento/guardar(eventoDTO)
+activate ctrl
+
+ctrl -> svc : guardar(eventoDTO)
+activate svc
+
+alt Validación exitosa
+    svc -> svc : generarCodigo()
+    activate svc
+    deactivate svc
+    
+    svc -> repo : save(evento)
+    activate repo
+    repo --> svc : eventoGuardado
+    deactivate repo
+    
+    svc --> ctrl : eventoGuardado
+    deactivate svc
+    
+    ctrl --> Usuario : redirect /evento/lista?exito
+    
+else Datos inválidos
+    ctrl --> Usuario : redirect /evento/nuevo?error
+end
+
+deactivate ctrl
+
+@enduml

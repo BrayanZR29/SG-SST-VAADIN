@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SST-Registro - Sistema de Gestión de Accidentes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+    <!-- ===== PANTALLA DE LOGIN ===== -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="bi bi-shield-check login-icon"></i>
+                <h1>SST-Registro</h1>
+                <p>Gestión de Accidentes e Incidentes Laborales</p>
+            </div>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" placeholder="correo@empresa.com" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" placeholder="Ingrese su contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+            </form>
+            <div class="login-footer">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PANTALLA PRINCIPAL ===== -->
+    <div id="main-screen" class="main-screen d-none">
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="bi bi-shield-check"></i>
+                <span>SST-Registro</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="dashboard">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-page="registrar">
+                    <i class="bi bi-plus-circle"></i>
+                    <span>Registrar</span>
+                </li>
+                <li class="nav-item" data-page="consultar">
+                    <i class="bi bi-search"></i>
+                    <span>Consultar</span>
+                </li>
+                <li class="nav-item" data-page="estadisticas">
+                    <i class="bi bi-bar-chart"></i>
+                    <span>Estadísticas</span>
+                </li>
+                <li class="nav-item" data-page="usuarios">
+                    <i class="bi bi-people"></i>
+                    <span>Usuarios</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Juan Pérez</span>
+                </div>
+                <button class="btn-logout" onclick="handleLogout()">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Cerrar sesión
+                </button>
+            </div>
+        </nav>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            
+            <!-- ===== PÁGINA: DASHBOARD ===== -->
+            <div id="page-dashboard" class="page active">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <div class="header-actions">
+                        <span class="user-badge">
+                            <i class="bi bi-person"></i> Juan Pérez - Responsable SST
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Tarjetas de Resumen -->
+                <div class="dashboard-cards">
+                    <div class="stat-card stat-danger">
+                        <div class="stat-icon">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number">12</span>
+                            <span class="stat-label">Accidentes</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-warning">
+                        <div class="stat-icon">
+                            <i class="bi bi-exclamation-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number">45</span>
+                            <span class="stat-label">Incidentes</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-success">
+                        <div class="stat-icon">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number">38</span>
+                            <span class="stat-label">Cerrados</span>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-info">
+                        <div class="stat-icon">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number">8</span>
+                            <span class="stat-label">Pendientes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="dashboard-charts">
+                    <div class="chart-card">
+                        <h5>Eventos por Mes</h5>
+                        <div class="bar-chart">
+                            <div class="bar"><div class="bar-fill" style="height: 60%"><span>Ene</span></div></div>
+                            <div class="bar"><div class="bar-fill" style="height: 45%"><span>Feb</span></div></div>
+                            <div class="bar"><div class="bar-fill" style="height: 80%"><span>Mar</span></div></div>
+                            <div class="bar"><div class="bar-fill" style="height: 55%"><span>Abr</span></div></div>
+                            <div class="bar"><div class="bar-fill" style="height: 70%"><span>May</span></div></div>
+                            <div class="bar"><div class="bar-fill" style="height: 40%"><span>Jun</span></div></div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h5>Eventos por Área</h5>
+                        <div class="pie-chart">
+                            <div class="pie-segment" style="--p: 40; --c: #2E86AB">Almacén 40%</div>
+                            <div class="pie-segment" style="--p: 30; --c: #A23B72">Producción 30%</div>
+                            <div class="pie-segment" style="--p: 20; --c: #F18F01">Oficina 20%</div>
+                            <div class="pie-segment" style="--p: 10; --c: #28A745">Mantenimiento 10%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Últimos Eventos -->
+                <div class="recent-events">
+                    <h5>Últimos Eventos</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Área</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr onclick="showDetalle('ACC-012')">
+                                <td><strong>ACC-012</strong></td>
+                                <td>15/03/2026</td>
+                                <td><span class="badge bg-danger">Accidente</span></td>
+                                <td>Almacén</td>
+                                <td><span class="badge bg-danger">Abierto</span></td>
+                            </tr>
+                            <tr onclick="showDetalle('INC-045')">
+                                <td><strong>INC-045</strong></td>
+                                <td>14/03/2026</td>
+                                <td><span class="badge bg-warning text-dark">Incidente</span></td>
+                                <td>Producción</td>
+                                <td><span class="badge bg-warning text-dark">En Proceso</span></td>
+                            </tr>
+                            <tr onclick="showDetalle('ACC-011')">
+                                <td><strong>ACC-011</strong></td>
+                                <td>12/03/2026</td>
+                                <td><span class="badge bg-danger">Accidente</span></td>
+                                <td>Mantenimiento</td>
+                                <td><span class="badge bg-success">Cerrado</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== PÁGINA: REGISTRAR EVENTO ===== -->
+            <div id="page-registrar" class="page">
+                <div class="page-header">
+                    <h2>Registrar Nuevo Evento</h2>
+                </div>
+
+                <form class="event-form" onsubmit="handleRegistrar(event)">
+                    <div class="form-section">
+                        <h5>Tipo de Evento</h5>
+                        <div class="tipo-evento-group">
+                            <label class="radio-card">
+                                <input type="radio" name="tipo" value="ACCIDENTE" checked>
+                                <div class="radio-content">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    <span>Accidente</span>
+                                </div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="tipo" value="INCIDENTE">
+                                <div class="radio-content">
+                                    <i class="bi bi-exclamation-circle-fill"></i>
+                                    <span>Incidente</span>
+                                </div>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="tipo" value="ENFERMEDAD">
+                                <div class="radio-content">
+                                    <i class="bi bi-thermometer-half"></i>
+                                    <span>Enfermedad Profesional</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h5>Datos del Evento</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Fecha y Hora *</label>
+                                    <input type="datetime-local" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Área/Lugar *</label>
+                                    <select class="form-select" required>
+                                        <option value="">Seleccionar área</option>
+                                        <option value="almacen">Almacén</option>
+                                        <option value="produccion">Producción</option>
+                                        <option value="oficina">Oficina</option>
+                                        <option value="mantenimiento">Mantenimiento</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Personas Involucradas</label>
+                            <input type="text" class="form-control" placeholder="Nombres de las personas involucradas">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Descripción del Hecho *</label>
+                            <textarea class="form-control" rows="4" placeholder="Describa detalladamente qué ocurrió..." required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Consecuencias</label>
+                            <textarea class="form-control" rows="2" placeholder="Lesiones, daños materiales, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h5>Clasificación</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Nivel de Gravedad *</label>
+                                <div class="gravedad-group">
+                                    <label class="radio-gravedad gravedad-leve">
+                                        <input type="radio" name="gravedad" value="LEVE" checked>
+                                        <span>Leve</span>
+                                    </label>
+                                    <label class="radio-gravedad gravedad-grave">
+                                        <input type="radio" name="gravedad" value="GRAVE">
+                                        <span>Grave</span>
+                                    </label>
+                                    <label class="radio-gravedad gravedad-mortal">
+                                        <input type="radio" name="gravedad" value="MORTAL">
+                                        <span>Mortal</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Responsable de Seguimiento</label>
+                                    <select class="form-select">
+                                        <option value="">Seleccionar</option>
+                                        <option value="1">María López</option>
+                                        <option value="2">Carlos García</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Guardar Evento
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="navigateTo('dashboard')">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ===== PÁGINA: CONSULTAR ===== -->
+            <div id="page-consultar" class="page">
+                <div class="page-header">
+                    <h2>Consultar Eventos</h2>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <label>Estado</label>
+                        <select class="form-select">
+                            <option value="">Todos</option>
+                            <option value="ABIERTO">Abierto</option>
+                            <option value="EN_PROCESO">En Proceso</option>
+                            <option value="CERRADO">Cerrado</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Tipo</label>
+                        <select class="form-select">
+                            <option value="">Todos</option>
+                            <option value="ACCIDENTE">Accidente</option>
+                            <option value="INCIDENTE">Incidente</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Área</label>
+                        <select class="form-select">
+                            <option value="">Todas</option>
+                            <option value="almacen">Almacén</option>
+                            <option value="produccion">Producción</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Buscar</label>
+                        <input type="text" class="form-control" placeholder="Código o descripción...">
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Gravedad</th>
+                                <th>Área</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ACC-012</strong></td>
+                                <td>15/03/2026 08:30</td>
+                                <td><span class="badge bg-danger">Accidente</span></td>
+                                <td><span class="badge bg-warning text-dark">Grave</span></td>
+                                <td>Almacén</td>
+                                <td><span class="badge bg-danger">Abierto</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showDetalle('ACC-012')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" onclick="showDetalle('ACC-012')">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>INC-045</strong></td>
+                                <td>14/03/2026 14:20</td>
+                                <td><span class="badge bg-warning text-dark">Incidente</span></td>
+                                <td><span class="badge bg-success">Leve</span></td>
+                                <td>Producción</td>
+                                <td><span class="badge bg-warning text-dark">En Proceso</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showDetalle('INC-045')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>ACC-011</strong></td>
+                                <td>12/03/2026 10:15</td>
+                                <td><span class="badge bg-danger">Accidente</span></td>
+                                <td><span class="badge bg-success">Leve</span></td>
+                                <td>Mantenimiento</td>
+                                <td><span class="badge bg-success">Cerrado</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showDetalle('ACC-011')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>INC-044</strong></td>
+                                <td>10/03/2026 16:45</td>
+                                <td><span class="badge bg-warning text-dark">Incidente</span></td>
+                                <td><span class="badge bg-success">Leve</span></td>
+                                <td>Oficina</td>
+                                <td><span class="badge bg-success">Cerrado</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showDetalle('INC-044')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination">
+                    <button class="btn btn-outline-secondary btn-sm" disabled>&laquo; Anterior</button>
+                    <span class="page-info">Página 1 de 5</span>
+                    <button class="btn btn-outline-secondary btn-sm">Siguiente &raquo;</button>
+                </div>
+            </div>
+
+            <!-- ===== PÁGINA: ESTADÍSTICAS ===== -->
+            <div id="page-estadisticas" class="page">
+                <div class="page-header">
+                    <h2>Estadísticas y Reportes</h2>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-file-pdf"></i> Exportar PDF
+                    </button>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <label>Período</label>
+                        <select class="form-select">
+                            <option>Este Mes</option>
+                            <option>Último Trimestre</option>
+                            <option selected>Este Año</option>
+                            <option>Rango Personalizado</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-arrow-repeat"></i> Actualizar
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="chart-card large">
+                        <h5>Eventos por Mes</h5>
+                        <div class="bar-chart horizontal">
+                            <div class="bar-row">
+                                <span class="bar-label">Ene</span>
+                                <div class="bar-track"><div class="bar-fill" style="width: 75%"></div></div>
+                                <span class="bar-value">15</span>
+                            </div>
+                            <div class="bar-row">
+                                <span class="bar-label">Feb</span>
+                                <div class="bar-track"><div class="bar-fill" style="width: 55%"></div></div>
+                                <span class="bar-value">11</span>
+                            </div>
+                            <div class="bar-row">
+                                <span class="bar-label">Mar</span>
+                                <div class="bar-track"><div class="bar-fill" style="width: 90%"></div></div>
+                                <span class="bar-value">18</span>
+                            </div>
+                            <div class="bar-row">
+                                <span class="bar-label">Abr</span>
+                                <div class="bar-track"><div class="bar-fill" style="width: 60%"></div></div>
+                                <span class="bar-value">12</span>
+                            </div>
+                            <div class="bar-row">
+                                <span class="bar-label">May</span>
+                                <div class="bar-track"><div class="bar-fill" style="width: 80%"></div></div>
+                                <span class="bar-value">16</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h5>Por Tipo</h5>
+                        <div class="pie-legend">
+                            <div class="legend-item"><span class="dot" style="background: #DC3545"></span> Accidentes 40%</div>
+                            <div class="legend-item"><span class="dot" style="background: #FFC107"></span> Incidentes 55%</div>
+                            <div class="legend-item"><span class="dot" style="background: #17A2B8"></span> Enfermedades 5%</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h5>Por Gravedad</h5>
+                        <div class="pie-legend">
+                            <div class="legend-item"><span class="dot" style="background: #28A745"></span> Leve 70%</div>
+                            <div class="legend-item"><span class="dot" style="background: #FFC107"></span> Grave 25%</div>
+                            <div class="legend-item"><span class="dot" style="background: #DC3545"></span> Mortal 5%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-summary">
+                    <h5>Resumen del Período</h5>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <strong>Total Eventos:</strong> 72
+                        </div>
+                        <div class="summary-item">
+                            <strong>Tasa de Cierre:</strong> 85%
+                        </div>
+                        <div class="summary-item">
+                            <strong>Días Promedio Cierre:</strong> 12
+                        </div>
+                        <div class="summary-item">
+                            <strong>Área Crítica:</strong> Almacén
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PÁGINA: USUARIOS ===== -->
+            <div id="page-usuarios" class="page">
+                <div class="page-header">
+                    <h2>Gestión de Usuarios</h2>
+                    <button class="btn btn-primary" onclick="showModal('usuario')">
+                        <i class="bi bi-person-plus"></i> Nuevo Usuario
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Rol</th>
+                                <th>Área</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>María López</strong></td>
+                                <td>maria.lopez@empresa.com</td>
+                                <td><span class="badge bg-primary">Responsable SST</span></td>
+                                <td>SST</td>
+                                <td><span class="badge bg-success">Activo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Juan Pérez</strong></td>
+                                <td>juan.perez@empresa.com</td>
+                                <td><span class="badge bg-info">Jefe de Área</span></td>
+                                <td>Producción</td>
+                                <td><span class="badge bg-success">Activo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Carlos García</strong></td>
+                                <td>carlos.garcia@empresa.com</td>
+                                <td><span class="badge bg-secondary">Trabajador</span></td>
+                                <td>Almacén</td>
+                                <td><span class="badge bg-success">Activo</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== MODAL: DETALLE DE EVENTO ===== -->
+    <div class="modal fade" id="modalDetalle" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalle del Evento <span id="detalleCodigo">ACC-012</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="detalle-grid">
+                        <div class="detalle-section">
+                            <h6>Datos del Evento</h6>
+                            <dl class="row">
+                                <dt class="col-4">Tipo:</dt>
+                                <dd class="col-8"><span class="badge bg-danger">Accidente</span></dd>
+                                <dt class="col-4">Fecha:</dt>
+                                <dd class="col-8">15/03/2026 08:30</dd>
+                                <dt class="col-4">Área:</dt>
+                                <dd class="col-8">Almacén</dd>
+                                <dt class="col-4">Gravedad:</dt>
+                                <dd class="col-8"><span class="badge bg-warning text-dark">Grave</span></dd>
+                                <dt class="col-4">Estado:</dt>
+                                <dd class="col-8"><span class="badge bg-danger">Abierto</span></dd>
+                            </dl>
+                        </div>
+                        <div class="detalle-section">
+                            <h6>Descripción</h6>
+                            <p>El trabajador realizaba labores de descarga de mercadería cuando resbaló debido a que el piso estaba mojado por una fuga de agua en una tubería cercana. Como consecuencia, sufrió una contusión en el brazo derecho.</p>
+                        </div>
+                        <div class="detalle-section">
+                            <h6>Personas Involucradas</h6>
+                            <p>Carlos Mendoza (Trabajador), Juan Pérez (Testigo)</p>
+                        </div>
+                        <div class="detalle-section">
+                            <h6>Investigación</h6>
+                            <p class="text-muted"><em>No se ha realizado investigación aún.</em></p>
+                            <button class="btn btn-sm btn-primary" onclick="showModal('investigacion')">
+                                <i class="bi bi-clipboard-plus"></i> Registrar Investigación
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> Cerrar Caso
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="bi bi-file-pdf"></i> Exportar PDF
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: INVESTIGACIÓN ===== -->
+    <div class="modal fade" id="modalInvestigacion" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Registrar Investigación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Causa Inmediata *</label>
+                        <textarea class="form-control" rows="2" placeholder="¿Qué pasó directamente?"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Causas Básicas *</label>
+                        <textarea class="form-control" rows="2" placeholder="Factores subyacentes..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Factores Contributorios</label>
+                        <textarea class="form-control" rows="2" placeholder="Condiciones que contribuyeron..."></textarea>
+                    </div>
+                    <hr>
+                    <h6>Acciones Correctivas</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Acción 1 *</label>
+                        <div class="row g-2">
+                            <div class="col-7">
+                                <input type="text" class="form-control" placeholder="Descripción de la acción">
+                            </div>
+                            <div class="col-3">
+                                <input type="text" class="form-control" placeholder="Responsable">
+                            </div>
+                            <div class="col-2">
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">
+                        <i class="bi bi-check"></i> Guardar Investigación
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST NOTIFICATION ===== -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert">
+            <div class="toast-header">
+                <i class="bi bi-check-circle text-success me-2"></i>
+                <strong class="me-auto">SST-Registro</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                Operación realizada exitosamente.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

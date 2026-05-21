@@ -1,0 +1,98 @@
+@startuml CasosDeUso
+!theme plain
+
+title Diagrama de Casos de Uso - SST-Registro
+
+left to right direction
+
+' Actores
+actor Trabajador as t
+actor "Jefe de Área" as j
+actor "Responsable SST" as r
+actor Administrador as a
+
+' Casos de Uso
+package "Gestión de Acceso" {
+    usecase "UC-1: Login" as login
+    usecase "UC-2: Cerrar Sesión" as logout
+}
+
+package "Gestión de Eventos" {
+    usecase "UC-3: Registrar Evento" as registrar
+    usecase "UC-4: Ver Dashboard" as dashboard
+    usecase "UC-5: Consultar Eventos" as consultar
+    usecase "UC-6: Ver Detalle de Evento" as detalle
+}
+
+package "Investigación" {
+    usecase "UC-7: Registrar Investigación" as investigar
+    usecase "UC-8: Gestionar Acciones Correctivas" as acciones
+    usecase "UC-9: Cerrar Caso" as cerrar
+}
+
+package "Reportes" {
+    usecase "UC-10: Ver Estadísticas" as estadisticas
+    usecase "UC-11: Generar Reportes" as reportes
+    usecase "UC-12: Exportar PDF" as exportar
+}
+
+package "Administración" {
+    usecase "UC-13: Gestionar Usuarios" as usuarios
+    usecase "UC-14: Configurar Sistema" as configurar
+}
+
+' Relaciones Actor - Caso de Uso
+
+t --> login
+t --> logout
+t --> registrar
+t --> dashboard
+t --> consultar
+t --> detalle
+t --> exportar
+
+j --> login
+j --> logout
+j --> registrar
+j --> dashboard
+j --> consultar
+j --> detalle
+j --> investigar
+j --> acciones
+j --> cerrar
+j --> estadisticas
+j --> reportes
+j --> exportar
+
+r --> login
+r --> logout
+r --> dashboard
+r --> registrar
+r --> consultar
+r --> detalle
+r --> investigar
+r --> acciones
+r --> cerrar
+r --> estadisticas
+r --> reportes
+r --> exportar
+
+a --> login
+a --> logout
+a --> dashboard
+a --> estadisticas
+a --> reportes
+a --> usuarios
+a --> configurar
+
+' Extensiones e Include
+registrar ..> login : <<include>>
+logout ..> login : <<include>>
+dashboard ..> login : <<include>>
+consultar ..> login : <<include>>
+detalle ..> login : <<include>>
+investigar ..> consultar : <<extend>>
+acciones ..> investigar : <<extend>>
+cerrar ..> acciones : <<extend>>
+
+@enduml

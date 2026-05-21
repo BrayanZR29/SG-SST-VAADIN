@@ -1,0 +1,52 @@
+@startuml SecuenciaInvestigacion
+!theme plain
+
+title Diagrama de Secuencia - Registrar Investigación
+
+actor Usuario
+participant ":InvestigacionController" as ctrl
+participant ":InvestigacionService" as svc
+participant ":EventoService" as evtSvc
+participant ":InvestigacionRepository" as repo
+participant ":EventoRepository" as evtRepo
+
+Usuario -> ctrl : GET /evento/{id}/investigacion
+activate ctrl
+ctrl --> Usuario : formularioInvestigacion.html
+deactivate ctrl
+
+Usuario -> ctrl : POST /investigacion/guardar(investigacionDTO)
+activate ctrl
+
+ctrl -> svc : guardar(investigacionDTO)
+activate svc
+
+svc -> evtSvc : buscarPorId(id)
+activate evtSvc
+evtSvc -> evtRepo : findById(id)
+activate evtRepo
+evtRepo --> evtSvc : evento
+deactivate evtRepo
+evtSvc --> svc : evento
+deactivate evtSvc
+
+svc -> repo : save(investigacion)
+activate repo
+repo --> svc : investigacionGuardada
+deactivate repo
+
+svc -> evtSvc : actualizarEstado(evento, EN_PROCESO)
+activate evtSvc
+evtSvc -> evtRepo : save(evento)
+activate evtRepo
+evtRepo --> evtSvc : eventoActualizado
+deactivate evtRepo
+deactivate evtSvc
+
+svc --> ctrl : investigacionGuardada
+deactivate svc
+
+ctrl --> Usuario : redirect /evento/detalle/{id}?exito
+deactivate ctrl
+
+@enduml

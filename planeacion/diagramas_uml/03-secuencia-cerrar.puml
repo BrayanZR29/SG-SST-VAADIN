@@ -1,0 +1,46 @@
+@startuml SecuenciaCerrarCaso
+!theme plain
+
+title Diagrama de Secuencia - Cerrar Caso
+
+actor Usuario
+participant ":EventoController" as ctrl
+participant ":EventoService" as svc
+participant ":AccionCorrectivaRepository" as repo
+
+Usuario -> ctrl : POST /evento/{id}/cerrar
+activate ctrl
+
+ctrl -> svc : cerrarCaso(id)
+activate svc
+
+svc -> repo : contarPendientes(evento.id)
+activate repo
+repo --> svc : cantidadPendientes
+deactivate repo
+
+alt No hay acciones pendientes
+    svc -> svc : evento.cerrar()
+    activate svc
+    deactivate svc
+    
+    svc -> repo : guardar(evento)
+    activate repo
+    repo --> svc : eventoCerrado
+    deactivate repo
+    
+    svc --> ctrl : casoCerrado
+    deactivate svc
+    
+    ctrl --> Usuario : redirect /evento/detalle/{id}?cerrado
+    
+else Hay acciones pendientes
+    svc --> ctrl : error
+    deactivate svc
+    
+    ctrl --> Usuario : redirect /evento/detalle/{id}?error=pendientes
+end
+
+deactivate ctrl
+
+@enduml

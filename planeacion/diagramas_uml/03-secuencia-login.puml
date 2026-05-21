@@ -1,0 +1,40 @@
+@startuml SecuenciaLogin
+!theme plain
+
+title Diagrama de Secuencia - Login
+
+actor Usuario
+participant ":LoginController" as ctrl
+participant ":UsuarioService" as svc
+database ":UsuarioRepository" as repo
+
+Usuario -> ctrl : GET /login
+ctrl -> ctrl : mostrarFormularioLogin()
+activate ctrl
+deactivate ctrl
+
+Usuario -> ctrl : POST /login(correo, password)
+activate ctrl
+
+ctrl -> svc : buscarPorCorreo(correo)
+activate svc
+
+svc -> repo : findByCorreo(correo)
+activate repo
+repo --> svc : Usuario / null
+deactivate repo
+
+alt Credenciales válidas
+    svc --> ctrl : usuario
+    ctrl -> ctrl : crearSesion(usuario)
+    ctrl --> Usuario : redirect /dashboard
+    
+else Credenciales inválidas
+    svc --> ctrl : null
+    ctrl --> Usuario : redirect /login?error
+end
+
+deactivate svc
+deactivate ctrl
+
+@enduml

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="CONSOLA" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ARCHIVO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/ssst.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/ssst-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.ssst" level="INFO"/>
+    <logger name="com.zaxxer.hikari" level="WARN"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLA"/>
+        <appender-ref ref="ARCHIVO"/>
+    </root>
+</configuration>

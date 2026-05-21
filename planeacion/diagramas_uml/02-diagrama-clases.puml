@@ -1,0 +1,132 @@
+@startuml DiagramaClases
+!theme plain
+
+title Diagrama de Clases - SST-Registro
+
+package "enums" {
+    enum RolUsuario {
+        ADMIN
+        RESPONSABLE_SST
+        JEFE_AREA
+        TRABAJADOR
+    }
+    
+    enum TipoEvento {
+        ACCIDENTE
+        INCIDENTE
+        ENFERMEDAD_PROFESIONAL
+    }
+    
+    enum Gravedad {
+        LEVE
+        GRAVE
+        MORTAL
+    }
+    
+    enum EstadoEvento {
+        ABIERTO
+        EN_PROCESO
+        CERRADO
+    }
+    
+    enum EstadoAccion {
+        PENDIENTE
+        COMPLETADA
+    }
+}
+
+package "model.entity" {
+    
+    class Usuario {
+        - id: Long
+        - nombre: String
+        - correo: String
+        - password: String
+        - rol: RolUsuario
+        - area: String
+        - activo: Boolean
+        - fechaCreacion: LocalDateTime
+        + getters()
+        + setters()
+    }
+    
+    class Evento {
+        - id: Long
+        - codigo: String
+        - tipo: TipoEvento
+        - gravedad: Gravedad
+        - estado: EstadoEvento
+        - fechaHora: LocalDateTime
+        - lugar: String
+        - descripcion: String
+        - consecuencias: String
+        - personasInvolucradas: String
+        - fechaCreacion: LocalDateTime
+        - fechaActualizacion: LocalDateTime
+        + getters()
+        + setters()
+        + generarCodigo(): String
+        + cerrar(): void
+    }
+    
+    class Investigacion {
+        - id: Long
+        - causaInmediata: String
+        - causaBasica: String
+        - factoresContribuitorios: String
+        - fechaInvestigacion: LocalDateTime
+        + getters()
+        + setters()
+    }
+    
+    class AccionCorrectiva {
+        - id: Long
+        - descripcion: String
+        - responsable: String
+        - fechaLimite: LocalDate
+        - estadoAccion: EstadoAccion
+        - fechaCompletado: LocalDate
+        + getters()
+        + setters()
+        + completar(): void
+        + estaVencada(): boolean
+    }
+}
+
+package "model.dto" {
+    
+    class EventoDTO {
+        - id: Long
+        - codigo: String
+        - tipo: String
+        - gravedad: String
+        - estado: String
+        - fechaHora: String
+        - lugar: String
+        - descripcion: String
+        + getters()
+        + setters()
+        + of(Evento): EventoDTO
+    }
+    
+    class EstadisticaDTO {
+        - totalAccidentes: Integer
+        - totalIncidentes: Integer
+        - porMes: Map<String, Integer>
+        + getters()
+    }
+}
+
+' Relaciones
+Usuario "1" --> "*" Evento : registra
+Evento "1" --> "1" Investigacion : tiene
+Investigacion "1" --> "*" AccionCorrectiva : tiene
+Investigacion "*" --> "1" Usuario : investiga
+
+Usuario --> RolUsuario
+Evento --> TipoEvento
+Evento --> Gravedad
+Evento --> EstadoEvento
+AccionCorrectiva --> EstadoAccion
+
+@enduml

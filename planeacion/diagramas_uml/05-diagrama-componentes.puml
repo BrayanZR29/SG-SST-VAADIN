@@ -1,0 +1,91 @@
+@startuml Componentes
+!theme plain
+
+title Diagrama de Componentes - Arquitectura SST-Registro
+
+package "Presentation Layer" {
+    [Login Controller]
+    [Dashboard Controller]
+    [Evento Controller]
+    [Investigacion Controller]
+    [Estadistica Controller]
+    [Usuario Controller]
+    [Reporte Controller]
+    
+    component "Thymeleaf Templates" {
+        [login.html]
+        [dashboard.html]
+        [evento/*.html]
+        [investigacion/*.html]
+        [estadistica.html]
+    }
+}
+
+package "Service Layer" {
+    [Usuario Service]
+    [Evento Service]
+    [Investigacion Service]
+    [Estadistica Service]
+    [Reporte Service]
+}
+
+package "Repository Layer" {
+    [Usuario Repository]
+    [Evento Repository]
+    [Investigacion Repository]
+    [AccionCorrectiva Repository]
+}
+
+package "Domain" {
+    [Usuario Entity]
+    [Evento Entity]
+    [Investigacion Entity]
+    [AccionCorrectiva Entity]
+    
+    [Enums]
+}
+
+package "Security" {
+    [Spring Security Config]
+    [Password Encoder]
+}
+
+package "Database" {
+    database "MySQL" {
+        [usuario]
+        [evento]
+        [investigacion]
+        [accion_correctiva]
+    }
+}
+
+' Conexiones
+[Login Controller] ..> [Usuario Service]
+[Dashboard Controller] ..> [Evento Service]
+[Evento Controller] ..> [Evento Service]
+[Evento Controller] ..> [Usuario Service]
+[Investigacion Controller] ..> [Investigacion Service]
+[Estadistica Controller] ..> [Estadistica Service]
+[Usuario Controller] ..> [Usuario Service]
+[Reporte Controller] ..> [Reporte Service]
+[Reporte Controller] ..> [Evento Service]
+
+[Usuario Service] ..> [Usuario Repository]
+[Evento Service] ..> [Evento Repository]
+[Evento Service] ..> [Usuario Repository]
+[Investigacion Service] ..> [Investigacion Repository]
+[Investigacion Service] ..> [Evento Service]
+[Estadistica Service] ..> [Evento Repository]
+
+[Usuario Repository] --> [Usuario Entity]
+[Evento Repository] --> [Evento Entity]
+[Investigacion Repository] --> [Investigacion Entity]
+[AccionCorrectiva Repository] --> [AccionCorrectiva Entity]
+
+[Spring Security Config] --> [Password Encoder]
+[Usuario Service] --> [Password Encoder]
+
+[Evento Service] ..> [MySQL]
+[Usuario Service] ..> [MySQL]
+
+@enduml

@@ -1,0 +1,10 @@
+# Configuracion de la aplicacion SG-SST
+app.nombre=Sistema de Gestion SST
+app.version=1.0.0
+
+# Configuracion de base de datos (puede ser sobrescrito con propiedades del sistema)
+db.url=aws-1-us-west-2.pooler.supabase.com
+db.usuario=postgres.zjikrqdhefzvpfpcjkmg
+db.contrasena=Papayaso#292006
+db.pool.maxSize=10
+db.pool.minIdle=2

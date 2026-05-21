@@ -1,0 +1,39 @@
+@startuml ActividadesCerrar
+!theme plain
+
+title Diagrama de Actividades - Cerrar Caso
+
+start
+
+:Seleccionar Evento;
+
+if (¿Estado es CERRADO?) then (Sí)
+    :Mostrar "Caso ya cerrado";
+    stop
+else (No)
+endif
+
+if (¿Existe investigación?) then (No)
+    :Mostrar "Debe investigar primero";
+    stop
+else (Sí)
+endif
+
+:Verificar acciones correctivas;
+
+if (¿Todas completadas?) then (No)
+    :Mostrar "Acciones pendientes";
+    :Listar acciones incompletas;
+    stop
+else (Sí)
+endif
+
+:Registrar fecha de cierre;
+
+:Actualizar estado a CERRADO;
+
+:Mostrar "Caso cerrado exitosamente";
+
+stop
+
+@enduml
